@@ -1,0 +1,180 @@
+﻿<Controls:MetroWindow x:Class="MKVhardsubWPF.MainWindow"
+                      xmlns:local="clr-namespace:MKVhardsubWPF"
+                      xmlns:resx="clr-namespace:MKVhardsubWPF.Properties"
+                      xmlns:custom="clr-namespace:MKVhardsubWPF.Model"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      mc:Ignorable="d"
+                     
+                      Title="MKVhardsub"
+                      Height="350" Width="525" 
+                      Icon="MKVhardsub-icon.ico"
+                      GlowBrush="{DynamicResource AccentColorBrush}"
+                      BorderBrush="{DynamicResource AccentColorBrush}"
+                      BorderThickness="3"
+                      WindowStartupLocation="CenterScreen"
+                      ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button x:Name="cmdAbout" Click="cmdAbout_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+                   Height="20"
+                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_information}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"
+                   VerticalAlignment="Center"
+                   Text="About" />
+                </StackPanel>
+            </Button>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+
+    <Grid>
+        <StackPanel Orientation="Horizontal" Margin="15,10" Height="50" VerticalAlignment="Top">
+            <Button x:Name="cmdAddFiles" Height="50" Width="50" HorizontalAlignment="Left"
+                    Style="{DynamicResource MetroCircleButtonStyle}" Click="cmdAddFiles_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+            		Height="20"
+            		Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add_multiple}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </StackPanel>
+
+                <Control.ToolTip>Add file(s)...</Control.ToolTip>
+                <ToolTipService.BetweenShowDelay>5000</ToolTipService.BetweenShowDelay>
+                <ToolTipService.InitialShowDelay>500</ToolTipService.InitialShowDelay>
+                <ToolTipService.ShowDuration>5000</ToolTipService.ShowDuration>
+                <ToolTipService.Placement>Bottom</ToolTipService.Placement>
+            </Button>
+            <Button x:Name="cmdClearAll" Height="50" Width="50" VerticalAlignment="Top"  HorizontalAlignment="Left"
+                Style="{DynamicResource MetroCircleButtonStyle}" Click="cmdClearAll_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+            		Height="20"
+            		Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_list_delete}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </StackPanel>
+
+                <Control.ToolTip>Clear all items.</Control.ToolTip>
+                <ToolTipService.BetweenShowDelay>5000</ToolTipService.BetweenShowDelay>
+                <ToolTipService.InitialShowDelay>500</ToolTipService.InitialShowDelay>
+                <ToolTipService.ShowDuration>5000</ToolTipService.ShowDuration>
+                <ToolTipService.Placement>Bottom</ToolTipService.Placement>
+            </Button>
+
+            <Button x:Name="cmdStartConvert" Height="50" Width="50" VerticalAlignment="Top"  HorizontalAlignment="Left"
+                Style="{DynamicResource MetroCircleButtonStyle}" Margin="15 0 0 0" Click="cmdStartConvert_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+            		Height="20"
+            		Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_play}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </StackPanel>
+
+                <Control.ToolTip>Start encode.</Control.ToolTip>
+                <ToolTipService.BetweenShowDelay>5000</ToolTipService.BetweenShowDelay>
+                <ToolTipService.InitialShowDelay>500</ToolTipService.InitialShowDelay>
+                <ToolTipService.ShowDuration>5000</ToolTipService.ShowDuration>
+                <ToolTipService.Placement>Bottom</ToolTipService.Placement>
+            </Button>
+            <Button x:Name="cmdStopConvert" Height="50" Width="50" VerticalAlignment="Top"  HorizontalAlignment="Left"
+                Style="{DynamicResource MetroCircleButtonStyle}" IsEnabled="False" Click="cmdStopConvert_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+            		Height="20"
+            		Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_stop}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </StackPanel>
+                <Control.ToolTip>Stop encode.</Control.ToolTip>
+                <ToolTipService.BetweenShowDelay>5000</ToolTipService.BetweenShowDelay>
+                <ToolTipService.InitialShowDelay>500</ToolTipService.InitialShowDelay>
+                <ToolTipService.ShowDuration>5000</ToolTipService.ShowDuration>
+                <ToolTipService.Placement>Bottom</ToolTipService.Placement>
+            </Button>
+
+            <Button x:Name="cmdSettings" Height="50" Width="50" VerticalAlignment="Top"  HorizontalAlignment="Left"
+                Style="{DynamicResource MetroCircleButtonStyle}"  Margin="15 0 0 0" Click="cmdSettings_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+            		Height="20"
+            		Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_settings}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </StackPanel>
+                <Control.ToolTip>Open settings.</Control.ToolTip>
+                <ToolTipService.BetweenShowDelay>5000</ToolTipService.BetweenShowDelay>
+                <ToolTipService.InitialShowDelay>500</ToolTipService.InitialShowDelay>
+                <ToolTipService.ShowDuration>5000</ToolTipService.ShowDuration>
+                <ToolTipService.Placement>Bottom</ToolTipService.Placement>
+            </Button>
+        </StackPanel>
+
+        <!-- Data Grid -->
+        <DockPanel Margin="5,75,5,10">
+            <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" CanUserAddRows="False"
+                      HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto"
+                      DataContext="{Binding _localDb}" ItemsSource="{Binding _localDb}"
+                      ContextMenuOpening="dataGrid_ContextMenuOpening" SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Filename" Binding="{Binding Filename}" Width="200"
+                                        IsReadOnly="True" />
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"
+                                        IsReadOnly="True" />
+
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>Progress</DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.Width>150</DataGridTemplateColumn.Width>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ProgressBar Value="{Binding Progress}" Minimum="0" Maximum="100" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="Subtitle File" Binding="{Binding SubtitleFilename}"
+                                        Width="200" IsReadOnly="True" />
+                </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="mnuRemoveItem" Header="Remove item" Click="mnuRemoveItem_Click" />
+                        <MenuItem x:Name="mnuSubtitleFile" Header="Select subtitle file..." Click="mnuSubtitleFile_Click" />
+                        <MenuItem x:Name="mnuUseEmbedded" Header="Use embedded subtitle" Click="mnuUseEmbedded_Click"  />
+                        <MenuItem x:Name="mnuRemoveSub" Header="Remove subtitle" Click="mnuRemoveSub_Click" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+        </DockPanel>
+
+    </Grid>
+</Controls:MetroWindow>

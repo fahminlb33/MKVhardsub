@@ -1,0 +1,104 @@
+﻿<Controls:MetroWindow x:Class="MKVhardsubWPF.SettingsWindow"
+                      xmlns:local="clr-namespace:MKVhardsubWPF"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:custom="clr-namespace:MKVhardsubWPF.Model"
+                      
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      mc:Ignorable="d"
+             
+                      Title="Settings"
+                      Height="210.42" Width="342.837" 
+                      GlowBrush="{DynamicResource AccentColorBrush}"
+                      BorderBrush="{DynamicResource AccentColorBrush}"
+                      BorderThickness="3"
+                      WindowStartupLocation="CenterScreen"
+                      ResizeMode="NoResize"
+                      ShowInTaskbar="False">
+    <Grid  Margin="20,0,20,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Baris 1 -->
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="0,15,0,0"
+                       TextWrapping="Wrap" Text="Constant Rate Factor" VerticalAlignment="Top"
+                       Grid.Column="0" Grid.Row="0" FontWeight="Bold"/>
+
+        <!-- Baris 2 -->
+        <Slider x:Name="crfSlider" HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top" Maximum="51" Value="18"
+                    Grid.Column="0" Grid.Row="1" ValueChanged="crfSlider_ValueChanged"/>
+
+        <!-- Baris 3 -->
+        <Grid HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition  Width="*" />
+                <ColumnDefinition  Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="textBlock1" HorizontalAlignment="Stretch" Margin="0"
+                       TextWrapping="Wrap" Text="Better quality" VerticalAlignment="Top"
+                       Grid.Column="0" Grid.Row="0"/>
+
+            <TextBlock x:Name="lblCrfCount" HorizontalAlignment="Stretch" Margin="0"
+                       TextWrapping="Wrap" Text="18" VerticalAlignment="Top"
+                       Grid.Column="1" Grid.Row="0" TextAlignment="Center"/>
+
+            <TextBlock x:Name="label" Text="Lower filesize" HorizontalAlignment="Stretch"
+                       Margin="0" VerticalAlignment="Top"
+                       Grid.Column="2" Grid.Row="0" TextAlignment="Right"/>
+
+        </Grid>
+
+        <!-- Baris 4 -->
+        <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" TextWrapping="Wrap"
+                   Text="Preset" VerticalAlignment="Top" Margin="0,15,0,0"
+                   Grid.Column="0" Grid.Row="3" FontWeight="Bold"/>
+
+        <!-- Baris 5 -->
+        <ComboBox x:Name="cboPreset" HorizontalAlignment="Left" VerticalAlignment="Top"
+                  Width="173" SelectedIndex="5"
+                  Grid.Column="0" Grid.Row="4">
+            <TextBlock Text="ultrafast"/>
+            <TextBlock Text="superfast"/>
+            <TextBlock Text="veryfast"/>
+            <TextBlock Text="faster"/>
+            <TextBlock Text="fast"/>
+            <TextBlock Text="medium"/>
+            <TextBlock Text="slow"/>
+            <TextBlock Text="slower"/>
+            <TextBlock Text="veryslow"/>
+            <TextBlock Text="placebo"/>
+        </ComboBox>
+
+        <!-- Baris 6 -->
+        <Grid HorizontalAlignment="Stretch" Margin="0,15,0,0"
+              Grid.Column="0" Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="15" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="cmdSaveChanges" Style="{DynamicResource AccentedSquareButtonStyle}"
+                    Content="Save changes"
+                    Grid.Column="0" Grid.Row="0" Click="cmdSaveChanges_Click"/>
+            <Button x:Name="cmdDiscardChanges" Style="{DynamicResource SquareButtonStyle}" 
+                    Content="Discard changes"
+                    Grid.Column="2" Grid.Row="0" Click="cmdDiscardChanges_Click"/>
+
+        </Grid>
+    </Grid>
+</Controls:MetroWindow>
