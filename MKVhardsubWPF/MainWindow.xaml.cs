@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using MKVhardsubWPF.Model;
 using MKVhardsubWPF.ViewModel;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -20,6 +21,48 @@ namespace MKVhardsubWPF
         private HardsubWorker ffmpegWorker = null;
         private int currentIndex = 0;
         private bool _isCancelled = false;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            _localDb = new ConvertTaskDataSource();
+            dataGrid.DataContext = _localDb;
+            dataGrid.ItemsSource = _localDb;
+            currentDispatcher.Invoke(DispatcherPriority.Background, new Action(() => ResetAll()));
+        }
+
+        #region ViewModel Parts
+        private async void AddFilesGrid(string[] inputFiles)
+        {
+            currentDispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+            {
+                cmdAddFiles.IsEnabled = false;
+                cmdClearAll.IsEnabled = false;
+            }));
+
+            var hasDouble = false;
+            await Task.Factory.StartNew(() =>
+            {
+                foreach (string fname in inputFiles)
+                {
+                    if (_localDb.HasFilepath(fname))
+                    {
+                        hasDouble = true;
+                        continue;
+                    }
+                    currentDispatcher.Invoke(DispatcherPriority.Background, new Action(() => _localDb.AddTask(fname)));
+                }
+            });
+
+            if (hasDouble)
+                await this.ShowMessageAsync("Duplicate file(s)", "Same file(s) are not added to queue.");
+
+            currentDispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+            {
+                cmdAddFiles.IsEnabled = true;
+                cmdClearAll.IsEnabled = true;
+            }));
+        }
 
         private void ResetAll()
         {
@@ -41,14 +84,16 @@ namespace MKVhardsubWPF
             cmdStopConvert.IsEnabled = false;
             cmdSettings.IsEnabled = true;
         }
+        #endregion
 
+        #region Hardsubber Service
         private void FfmpegWorker_ActionCompleted(object sender, EventArgs e)
         {
             if (_isCancelled)
             {
                 if (currentIndex < _localDb.Count)
                 {
-                    currentDispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                    currentDispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                     {
                         _localDb[currentIndex].Progress = 100;
                         _localDb[currentIndex].Status = "Cancelled.";
@@ -59,7 +104,7 @@ namespace MKVhardsubWPF
 
             if (currentIndex < _localDb.Count)
             {
-                currentDispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                currentDispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                 {
                     _localDb[currentIndex].Progress = 100;
                  _localDb[currentIndex].Status = "Completed.";
@@ -72,7 +117,7 @@ namespace MKVhardsubWPF
             }
             else
             {
-                currentDispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
+                currentDispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                 {
                     cmdAddFiles.IsEnabled = false;
                     cmdClearAll.IsEnabled = true;
@@ -85,7 +130,7 @@ namespace MKVhardsubWPF
 
         private void FfmpegWorker_ProgressChanged(object sender, MProgressChangedEventArgs e)
         {
-            currentDispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
+            currentDispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
             {
                 if (currentIndex <= _localDb.Count)
                 {
@@ -94,48 +139,10 @@ namespace MKVhardsubWPF
                 }
             }));
         }
+        #endregion
 
-        public MainWindow()
-        {
-            InitializeComponent();
-            _localDb = new ConvertTaskDataSource();
-            dataGrid.DataContext = _localDb;
-            dataGrid.ItemsSource = _localDb;
-            currentDispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => ResetAll()));
-        }
-         
-        private async void AddFilesGrid(string[] inputFiles)
-        {
-            currentDispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
-            {
-                cmdAddFiles.IsEnabled = false;
-                cmdClearAll.IsEnabled = false;
-            }));
 
-            var hasDouble = false;
-            await Task.Factory.StartNew(() =>
-            {
-                foreach (string fname in inputFiles)
-                {
-                    if (_localDb.HasFilepath(fname))
-                    {
-                        hasDouble = true;
-                        continue;
-                    }
-                    currentDispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => _localDb.AddTask(fname)));
-                }
-            });
-
-            if (hasDouble)
-                await this.ShowMessageAsync("Duplicate file(s)", "Same file(s) are not added to queue.");
-
-            currentDispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
-            {
-                cmdAddFiles.IsEnabled = true;
-                cmdClearAll.IsEnabled = true;
-            }));
-        }
-
+        #region Buttons
         private void cmdAddFiles_Click(object sender, RoutedEventArgs e)
         {
             var vwOpen = new OpenFileDialog()
@@ -161,7 +168,7 @@ namespace MKVhardsubWPF
 
         private async void cmdStartConvert_Click(object sender, RoutedEventArgs e)
         {
-            currentDispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
+            currentDispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
             {
                 cmdAddFiles.IsEnabled = false;
                 cmdClearAll.IsEnabled = false;
@@ -181,7 +188,7 @@ namespace MKVhardsubWPF
 
         private void cmdStopConvert_Click(object sender, RoutedEventArgs e)
         {
-            currentDispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
+            currentDispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
             {
                 cmdAddFiles.IsEnabled = false;
                 cmdClearAll.IsEnabled = true;
@@ -192,15 +199,16 @@ namespace MKVhardsubWPF
             ffmpegWorker.StopAction();
         }
 
-        private void cmdAbout_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void cmdClearAll_Click(object sender, RoutedEventArgs e)
         {
             ResetAll();
         }
+
+        private void cmdAbout_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://fahminlb33.github.io/");
+        }
+        #endregion
 
         #region Data Grid
         private void dataGrid_ContextMenuOpening(object sender, System.Windows.Controls.ContextMenuEventArgs e)
