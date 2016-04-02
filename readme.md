@@ -14,6 +14,8 @@ advantages against SubStation Alpha subtitle.
 3. Easy to use with embedded subtitle inside MKV or external subtitle file.
 4. Supports both x86 and x64 version of Windows.
 
+  This tool is currently reworked in WPF and dropped the WinForms. Be patient for new release!
+
 ## How To Use
 
 1. Download *ffmpeg* and *MKVToolNix*, place it on *bin* folder.
